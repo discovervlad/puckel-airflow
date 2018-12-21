@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-LocalExecutor.yml
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: webserver
+  name: webserver
+spec:
+  serviceName: "webserver"
+  replicas: 1
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: webserver
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      containers:
+        - name: webserver
+          image: discovervlad/puckel-airflow:0.0.6
+          env:
+            - name: EXECUTOR
+              value: Local
+            - name: LOAD_EX
+              value: "n"
+#            - name: POSTGRES_SERVICE_HOST
+#              value: "postgres.default.svc.cluster.local"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: /usr/local/airflow/dags
+              name: webserver-persistent-storage
+  volumeClaimTemplates:
+  - metadata:
+      name: webserver-persistent-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: "fast"
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
