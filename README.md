@@ -1,5 +1,8 @@
 # docker-airflow
 This is a re-make of puckel/airflow with modifications
+run ./build.sh to build the container
+run ./deploy.sh to deploy into k8s
+run ./undeploy.sh to remove from k8s
 
 [![CircleCI](https://circleci.com/gh/puckel/docker-airflow/tree/master.svg?style=svg)](https://circleci.com/gh/puckel/docker-airflow/tree/master)
 [![Docker Build Status](https://img.shields.io/docker/build/puckel/docker-airflow.svg)]()
